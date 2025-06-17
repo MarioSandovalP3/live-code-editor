@@ -1,1 +1,186 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Estilos globales para Live Code Editor
+ *
+ * Contiene:
+ * - Variables CSS para temas claro/oscuro
+ * - Layout responsivo
+ * - Estilos de componentes compartidos
+ * - Animaciones y transiciones
+ */
+// Variables para tema claro
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --editor-bg: #f5f5f5;
+  --header-bg: #333333;
+  --header-text: #ffffff;
+  --editor-border: #ddd;
+  --tab-bg: #f0f0f0;
+  --tab-active-bg: #e0e0e0;
+  --tab-text: #555;
+  --tab-active-text: #222;
+  --tab-border: #ccc;
+}
+
+// Variables para tema oscuro
+.dark-theme, .dark-theme .preview-frame {
+  --bg-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --editor-bg: #252526;
+  --header-bg: #2d2d2d;
+  --header-text: #ffffff;
+  --editor-border: #444;
+  --tab-bg: #2a2a2a;
+  --tab-active-bg: #1a1a1a;
+  --tab-text: #bbb;
+  --tab-active-text: #fff;
+  --tab-border: #555;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+// Layout principal y editores
+/* Layout responsivo */
+.code-editors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--editor-bg);
+}
+
+// Breakpoint para tablet (768px)
+@media (min-width: 768px) {
+  /* Tablet */
+  .code-editors {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  app-code-editor {
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 300px;
+  }
+  
+  .preview {
+    flex: 1 1 100%;
+  }
+}
+
+// Breakpoint para escritorio (1024px)
+@media (min-width: 1024px) {
+  /* Escritorio */
+  .code-editors {
+    flex-direction: row;
+    height: calc(100vh - 60px);
+  }
+  
+  app-code-editor {
+    flex: 1;
+    height: 100%;
+  }
+  
+  .preview {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+  }
+}
+
+// Estilos de pestañas del editor
+.tab-buttons {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--editor-bg);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--tab-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.tab-button:hover {
+  background: rgba(66, 133, 244, 0.1);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  color: #4285f4;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(66, 133, 244, 0.3);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 25%;
+  right: 25%;
+  height: 3px;
+  background: #4285f4;
+  border-radius: 4px;
+  animation: pulse 0.5s ease-out;
+  box-shadow: 0 0 8px rgba(66, 133, 244, 0.5);
+}
+
+// Animación para indicador de pestaña activa
+@keyframes pulse {
+  0% { transform: scaleX(0); opacity: 0; }
+  50% { transform: scaleX(1.2); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+app-code-editor {
+  flex: 1;
+  border: 1px solid var(--editor-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.preview {
+  
+  background: var(--bg-color);
+}
+
+// Estilos para el resizer (divisor de paneles)
+.resizer {
+  width: 8px;
+  background-color: var(--tab-border, #ddd);
+  cursor: ew-resize;
+  transition: background-color 0.2s ease;
+  position: relative;
+  z-index: 10;
+}
+
+.resizer:hover {
+  background-color: var(--tab-active-border, #007bff);
+}
+
+.editor-container.resizing .resizer,
+.editor-container.resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.editor-container.resizing .resizer {
+  background-color: var(--tab-active-border, #007bff);
+  width: 10px;
+}

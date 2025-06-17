@@ -1,59 +1,65 @@
-# LiveCodeEditor
+# Editor de Código en Vivo
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.2.
+Un editor de código integrado con Angular que permite editar HTML, CSS y JavaScript con vista previa en tiempo real.
 
-## Development server
+## Características Principales
+- Editor de código basado en Monaco Editor (el mismo que usa VS Code)
+- Vista previa en tiempo real
+- Soporte para temas claros/oscuros
+- Vistas de dispositivo móvil/tablet/escritorio
+- Resaltado de sintaxis para HTML, CSS y JavaScript
+- Persistencia del código en localStorage
 
-To start a local development server, run:
+## Requisitos
+- Node.js v18+
+- Angular CLI v20+
+- NPM v9+
 
+## Instalación
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/tu-usuario/live-code-editor.git
+```
+2. Instalar dependencias:
+```bash
+cd live-code-editor
+npm install
+```
+
+## Uso
+Iniciar servidor de desarrollo:
 ```bash
 ng serve
 ```
+Abrir en navegador: `http://localhost:4200/`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+## Comandos útiles
+- Generar nuevo componente:
 ```bash
-ng generate component component-name
+ng generate component nombre-componente
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+- Ejecutar pruebas:
 ```bash
-ng generate --help
+ng test
 ```
-
-## Building
-
-To build the project run:
-
+- Construir para producción:
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Estructura del Proyecto
+- `src/app/` - Componentes principales
+  - `app.ts` - Componente raíz
+  - `code-editor.component.ts` - Editor de código
+  - `preview.component.ts` - Vista previa
+- `src/styles.scss` - Estilos globales
 
-## Running unit tests
+## Contribución
+1. Hacer fork del proyecto
+2. Crear rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Hacer commit de tus cambios (`git commit -m 'Añadir nueva funcionalidad'`)
+4. Hacer push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Abrir Pull Request
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Licencia
+MIT
