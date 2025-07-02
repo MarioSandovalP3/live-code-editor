@@ -14,14 +14,14 @@ import { Component, Input, OnChanges, ViewChild, ElementRef } from '@angular/cor
   standalone: true,
   template: `
     <div class="device-controls">
-      <button (click)="setDeviceView('mobile')">
+      <button (click)="setDeviceView('desktop')" [class.active]="currentView === 'desktop'">
+        <i class="fas fa-desktop"></i> Escritorio
+      </button>
+      <button (click)="setDeviceView('mobile')" [class.active]="currentView === 'mobile'">
         <i class="fas fa-mobile-alt"></i> Móvil
       </button>
-      <button (click)="setDeviceView('tablet')">
+      <button (click)="setDeviceView('tablet')" [class.active]="currentView === 'tablet'">
         <i class="fas fa-tablet-alt"></i> Tablet
-      </button>
-      <button (click)="setDeviceView('desktop')">
-        <i class="fas fa-desktop"></i> Escritorio
       </button>
     </div>
     <div class="device-frame" [class.mobile]="currentView === 'mobile'"
@@ -31,25 +31,62 @@ import { Component, Input, OnChanges, ViewChild, ElementRef } from '@angular/cor
     </div>
   `,
   styles: [`
-    /* Estáticos solamente - sin lógica dinámica */
+    /* Estilos consistentes con los botones de pestañas */
     .device-controls {
       display: flex;
-      gap: 0.5rem;
-      background: #f5f5f5;
-      border-bottom: 1px solid #ddd;
-      
+      background: var(--tab-bg, #f0f0f0);
+      border-bottom: 1px solid var(--tab-border, #ddd);
     }
     
     .device-controls button {
-      padding: 0.5rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background: white;
+      padding: 10px 20px;
+      border: none;
+      background: none;
       cursor: pointer;
+      font-weight: 500;
+      color: var(--tab-text, #333);
+      transition: all 0.2s ease;
+      position: relative;
     }
     
     .device-controls button:hover {
-      background: #eee;
+      background: var(--tab-hover, rgba(0,0,0,0.05));
+    }
+    
+    .device-controls button.active {
+      background: var(--tab-active-bg, white);
+      color: var(--tab-active-text, #007bff);
+      border-bottom: 3px solid var(--tab-active-border, #007bff);
+    }
+    
+    .device-controls button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--tab-active-border, #007bff);
+    }
+
+    :host-context(.dark) {
+      --tab-bg: #1a1a1a;
+      --tab-border: #333;
+      --tab-text: #f0f0f0;
+      --tab-hover: rgba(66, 133, 244, 0.1);
+      --tab-active-bg: #252525;
+      --tab-active-text: #4285f4;
+      --tab-active-border: #4285f4;
+    }
+
+    :host-context(.light) {
+      --tab-bg: #f0f0f0;
+      --tab-border: #ddd;
+      --tab-text: #333;
+      --tab-hover: rgba(0,0,0,0.05);
+      --tab-active-bg: white;
+      --tab-active-text: #007bff;
+      --tab-active-border: #007bff;
     }
     
     
