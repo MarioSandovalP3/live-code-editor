@@ -18,7 +18,7 @@ Un editor de código integrado con Angular que permite editar HTML, CSS y JavaSc
 ## Instalación
 1. Clonar el repositorio:
 ```bash
-https://github.com/MarioSandovalP3/live-code-editor.git
+git https://github.com/MarioSandovalP3/live-code-editor.git
 ```
 2. Instalar dependencias:
 ```bash
