@@ -48,19 +48,45 @@ export class CodeEditorComponent {
    * - Registra listener para cambios
    */
   private initializeEditor() {
-    this.editor = monaco.editor.create(this.editorContainer.nativeElement, {
-      value: this.code,
-      language: this.language,
-      theme: this.theme,
-      automaticLayout: true,
-      minimap: { enabled: false }
-    });
+    // Configuración avanzada del web worker
+    (window as any).MonacoEnvironment = {
+      getWorker: function(moduleId: string, label: string) {
+        const getWorkerModule = (moduleUrl: string, label: string) => {
+          return new Worker(new URL(moduleUrl, window.location.href), {
+            name: label,
+            type: 'module'
+          });
+        };
 
-    this.editor.onDidChangeModelContent(() => {
-      const newCode = this.editor?.getValue() || '';
-      this.code = newCode;
-      this.codeChange.emit(newCode);
-    });
+        switch (label) {
+          case 'typescript':
+          case 'javascript':
+            return getWorkerModule('./assets/monaco-editor-worker.js', label);
+          default:
+            return getWorkerModule('./assets/monaco-editor-worker.js', label);
+        }
+      }
+    };
+
+    try {
+      this.editor = monaco.editor.create(this.editorContainer.nativeElement, {
+        value: this.code,
+        language: this.language,
+        theme: this.theme,
+        automaticLayout: true,
+        minimap: { enabled: false }
+      });
+    } catch (error) {
+      console.error('Error initializing Monaco Editor:', error);
+    }
+
+    if (this.editor) {
+      this.editor.onDidChangeModelContent(() => {
+        const newCode = this.editor?.getValue() || '';
+        this.code = newCode;
+        this.codeChange.emit(newCode);
+      });
+    }
   }
 
   /**
