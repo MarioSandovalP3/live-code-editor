@@ -141,6 +141,9 @@ export class PreviewComponent implements OnChanges {
   @Input() html: string = '';
   @Input() css: string = '';
   @Input() js: string = '';
+
+  private updateTimeout: any = null;
+  private readonly DEBOUNCE_TIME = 500; // 0.5 segundos
   
   currentView: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
@@ -166,7 +169,15 @@ export class PreviewComponent implements OnChanges {
    * Detecta cambios en el código y actualiza el preview
    */
   ngOnChanges() {
-    this.updatePreview();
+    // Cancelar el timeout anterior si existe
+    if (this.updateTimeout) {
+      clearTimeout(this.updateTimeout);
+    }
+    
+    // Establecer un nuevo timeout
+    this.updateTimeout = setTimeout(() => {
+      this.updatePreview();
+    }, this.DEBOUNCE_TIME);
   }
 
   /**
@@ -175,17 +186,30 @@ export class PreviewComponent implements OnChanges {
    * - Aplica viewport según el dispositivo
    * - Maneja errores de ejecución
    */
+  private isValidJsCode(code: string): boolean {
+    try {
+      new Function(code);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   private updatePreview() {
     try {
       if (!this.previewFrame) return;
       
-      const content = `<!DOCTYPE html>
+      const doc = this.previewFrame.nativeElement.contentDocument;
+      if (!doc) return;
+      
+      doc.open();
+      doc.write(`<!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="${this.currentView === 'desktop' ? ' initial-scale=1' : 'width=device-width, initial-scale=1'}">
   <style>
     body {
-      margin: 0; 
+      margin: 0;
       background-color: white;
       color: #333333;
       min-height: ${this.currentView === 'desktop' ? 'auto' : '100vh'};
@@ -196,17 +220,18 @@ export class PreviewComponent implements OnChanges {
 </head>
 <body>
   ${this.html}
-  <script>
-    try {
-      ${this.js}
-    } catch (error) {
-      console.error('Execution error:', error);
-    }
-  </script>
 </body>
-</html>`;
-
-      this.previewFrame.nativeElement.srcdoc = content;
+</html>`);
+      
+      if (this.js && this.isValidJsCode(this.js)) {
+        try {
+          const script = doc.createElement('script');
+          script.text = this.js;
+          doc.body.appendChild(script);
+        } catch {}
+      }
+      
+      doc.close();
     } catch (error) {
       console.error('Error generating preview:', error);
     }

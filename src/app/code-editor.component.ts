@@ -107,4 +107,15 @@ export class CodeEditorComponent {
       monaco.editor.setTheme(this.theme);
     }
   }
+
+  /**
+   * Actualiza el contenido del editor
+   * @param code Nuevo código a establecer
+   */
+  public setCode(code: string) {
+    if (this.editor) {
+      this.editor.setValue(code);
+      this.code = code;
+    }
+  }
 }

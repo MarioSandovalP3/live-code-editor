@@ -8,7 +8,7 @@
  * - Tema claro/oscuro
  * - Persistencia en localStorage
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as monaco from 'monaco-editor';
 import { CommonModule } from '@angular/common';
 import { Environment } from 'monaco-editor';
@@ -50,18 +50,21 @@ import { PreviewComponent } from './preview.component';
           <div class="code-editor-container">
             <app-code-editor
               *ngIf="activeTab === 'html'"
+              #htmlEditor
               language="html"
               [(code)]="htmlCode"
               [theme]="isDarkTheme ? 'vs-dark' : 'vs'"
             ></app-code-editor>
             <app-code-editor
               *ngIf="activeTab === 'css'"
+              #cssEditor
               language="css"
               [(code)]="cssCode"
               [theme]="isDarkTheme ? 'vs-dark' : 'vs'"
             ></app-code-editor>
             <app-code-editor
               *ngIf="activeTab === 'js'"
+              #jsEditor
               language="javascript"
               [(code)]="jsCode"
               [theme]="isDarkTheme ? 'vs-dark' : 'vs'"
@@ -199,6 +202,11 @@ import { PreviewComponent } from './preview.component';
   `],
 })
 export class App implements OnInit {
+  // Referencias a los editores
+  @ViewChild('htmlEditor') htmlEditor?: CodeEditorComponent;
+  @ViewChild('cssEditor') cssEditor?: CodeEditorComponent;
+  @ViewChild('jsEditor') jsEditor?: CodeEditorComponent;
+
   // Variables para el resizer
   private isResizing = false;
   private startX = 0;
@@ -355,9 +363,19 @@ export class App implements OnInit {
    * Restablece el código a los valores por defecto
    */
   resetCode() {
-    this.htmlCode = '<h1>Hello World!</h1>';
-    this.cssCode = 'h1 { color: blue; }';
-    this.jsCode = 'console.log("Hello from JS!");';
+    const defaultHtml = '<h1>Hello World!</h1>';
+    const defaultCss = 'h1 { color: blue; }';
+    const defaultJs = 'console.log("Hello from JS!");';
+
+    // Actualizar los editores usando el método público
+    this.htmlEditor?.setCode(defaultHtml);
+    this.cssEditor?.setCode(defaultCss);
+    this.jsEditor?.setCode(defaultJs);
+
+    // Actualizar las variables internas
+    this.htmlCode = defaultHtml;
+    this.cssCode = defaultCss;
+    this.jsCode = defaultJs;
     this.saveToStorage();
   }
 
